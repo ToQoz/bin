@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo add-apt-repository ppa:upubuntu-com/office
+sudo apt-get update
+sudo apt-get install openoffice

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar $HOME/jar/solrmeter-0.3.0.jar
