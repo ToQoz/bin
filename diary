@@ -1,0 +1,12 @@
+#!/bin/sh
+
+TODAY=`date '+%F'`
+DIARY_DIR=$HOME/diaries
+[ -d $DIARY_DIR ] || mkdir $DIARY_DIR
+DIARY_FILE=$DIARY_DIR/$TODAY.txt
+
+if [ ! -f $DIARY_FILE ]; then
+    touch $DIARY_FILE
+    echo "[$TODAY's diary]" >> $DIARY_FILE
+fi
+$EDITOR $DIARY_FILE
