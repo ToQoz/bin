@@ -1,0 +1,36 @@
+#!/bin/sh
+
+install_libevent() {
+    wget "http://downloads.sourceforge.net/project/levent/libevent/libevent-2.0/libevent-2.0.19-stable.tar.gz"
+    tar zxvf libevent-2.0.19-stable.tar.gz
+    cd libevent-2.0.19-stable
+    if [ ! -d /opt/libevent ]; then sudo mkdir -p /opt/libevent; fi
+    ./configure --prefix=$LIBEVENT_DIR
+    make -j8
+    sudo make install
+}
+
+install_ncurses() {
+    apt-get install libncurses5
+    apt-get install libncurses5-deb
+}
+
+install_tmux() {
+    wget "http://downloads.sourceforge.net/project/tmux/tmux/tmux-1.7/tmux-1.7.tar.gz"
+    tar zxvf tmux-1.7.tar.gz
+    cd tmux-1.7/
+    if [ ! -d $TMUX_DIR ]; then sudo mkdir -p $TMUX_DIR; fi
+    ./configure CFLAGS="-I$LIBEVENT_DIR/include" LDFLAGS="-L$LIBEVENT_DIR/lib" --prefix=$TMUX_DIR
+    make -j8
+    sudo make install
+}
+
+operation() {
+    export LIBEVENT_DIR="/opt/libevent/"
+    export TMUX_DIR="/opt/tmux1.7"
+    install_libevent
+    install_ncurses
+    install_tmux
+}
+
+operation $@
