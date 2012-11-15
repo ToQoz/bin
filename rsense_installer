@@ -1,0 +1,14 @@
+#!/bin/sh
+
+cd /tmp
+[ -f rsense-0.3.tar.bz2 ] || wget "http://cx4a.org/pub/rsense/rsense-0.3.tar.bz2"
+tar -jxvf rsense-0.3.tar.bz2
+
+[ -d $HOME/opt ] || mkdir $HOME/opt
+[ -d $HOME/opt/rsense-0.3 ] && rm -r $HOME/opt/rsense-0.3
+cp -r rsense-0.3 $HOME/opt/rsense-0.3
+
+cd $HOME/opt/rsense-0.3
+chmod 0775 bin/rsense
+
+echo 'You should add $RSENSE_HOME=$HOME/opt/rsense/libexec to .zshrc'
