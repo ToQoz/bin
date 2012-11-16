@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ls ~/.vim/*.vimrc | xargs wc | tail -n1 | awk '{print $1}'
