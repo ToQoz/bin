@@ -1,8 +1,0 @@
-cd ~
-git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
-git clone git://github.com/sstephenson/ruby-build.git
-cd ruby-build; sudo ./install.sh
-
-echo 'You should excute following command, if you did not add yet.'
-echo 'echo "export PATH=$HOME/.rbenv/bin:$PATH" >> .zshrc'
-echo 'echo "eval $(rbenv init -)" >> .zshrc'

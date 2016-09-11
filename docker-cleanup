@@ -1,0 +1,11 @@
+#!/bin/sh
+
+CLEANUP_CONTAINERS=$(docker ps -a -q)
+CLEANUP_IMAGES=$(docker images | awk '/^<none>/ {print $3}')
+
+if [ -n "$CLEANUP_CONTAINERS" ]; then
+  docker rm $CLEANUP_CONTAINERS
+fi
+if [ -n "$CLEANUP_IMAGES" ]; then
+  docker rmi $CLEANUP_IMAGES
+fi

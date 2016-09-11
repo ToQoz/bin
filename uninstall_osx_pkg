@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+PACKAGE_ID=$(pkgutil --pkgs | peco)
+
+rm-pkg-files() {
+  while read line; do
+    file="/${line}"
+    if [ -f "$file" ]; then
+      rm "$file"
+    elif [ -d "$file" ]; then
+      rmdir "$file" || true
+    fi
+  done
+}
+
+if [ -n "$PACKAGE_ID" ]; then
+  pkgutil --files $PACKAGE_ID
+  echo -n "uninstall $PACKAGE_ID? [n/y]: "
+  read yn
+  if [ "$yn" = "y" ]; then
+    pkgutil --files $PACKAGE_ID | tac | rm-pkg-files
+    pkgutil --forget $PACKAGE_ID
+  fi
+fi

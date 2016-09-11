@@ -1,0 +1,61 @@
+#!/bin/sh
+
+set -e
+
+npm_version() {
+  node -e 'console.log(require("./package.json").version)'
+}
+
+if [ ! -f ./package.json ]; then
+  echo "package.json is not found" >> /dev/stderr
+fi
+
+if ! /usr/bin/which -s conventional-recommended-bump; then
+  echo "conventional-recommended-bump is not found" >> /dev/stderr
+  exit 1
+fi
+
+if ! /usr/bin/which -s conventional-github-releaser; then
+  echo "conventional-github-releaser is not found" >> /dev/stderr
+  exit 1
+fi
+
+if ! /usr/bin/which -s conventional-changelog; then
+  echo "conventional-changelog is not found" >> /dev/stderr
+  exit 1
+fi
+
+ls node_modules 2> /dev/null 1>&2 && rm -r node_modules
+git pull --rebase
+npm install
+npm test
+
+old_version=`npm_version`
+
+# bump version
+_BUMP=`conventional-recommended-bump -p angular`
+RECOMMENDED=${1:-$_BUMP}
+echo "current version: $old_version"
+/bin/echo -n "release: [major/minor/patch] (recommended:$RECOMMENDED) "
+read BUMP
+if [ -z "$BUMP" ]; then
+  BUMP=$RECOMMENDED
+fi
+
+cp package.json _package.json
+npm --no-git-tag-version version $BUMP &>/dev/null
+version=`npm_version`
+
+# build & commit changelog
+conventional-changelog -p angular -i CHANGELOG.md -o CHANGELOG.md
+git add CHANGELOG.md
+git commit -m "docs(CHANGELOG): $version"
+
+# git tag
+mv -f _package.json package.json
+npm version $version -m "chore(release): %s"
+
+# release 
+git push --follow-tags
+conventional-github-releaser -p angular
+npm publish

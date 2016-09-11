@@ -1,0 +1,5 @@
+git rev-list $(
+  git for-each-ref refs/heads/* | while read rev type name; do
+    git rev-list $rev | grep $(git rev-parse $1) >/dev/null && echo $rev
+  done
+) --not $1
