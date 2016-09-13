@@ -1,0 +1,32 @@
+#!/bin/bash
+
+for repo in `ghq list --full-path`; do
+  cd $repo
+
+  if [ "$(git remote -v | grep origin | wc -l)" = "0" ]; then
+    echo "$repo: origin is not found"
+    continue
+  fi
+
+  if [ -n "$(git diff --shortstat)" ]; then
+    echo "$repo: repo has uncommitted files"
+    continue
+  fi
+
+  if [ -n "$(git ls-files --others)" ]; then
+    echo "$repo: repo has untracked files"
+    continue
+  fi
+
+  DIFF=$(git diff master origin/master)
+
+  if [ $? != 0 ]; then
+    echo "$repo: repo has error"
+    continue
+  fi
+
+  if [ -n "$DIFF" ]; then
+    echo "$repo: repo has unpushed commits"
+    continue
+  fi
+done
