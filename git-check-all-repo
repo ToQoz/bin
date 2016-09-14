@@ -13,7 +13,7 @@ for repo in `ghq list --full-path`; do
     continue
   fi
 
-  if [ -n "$(git ls-files --others)" ]; then
+  if [ -n "$(git ls-files --others --exclude-standard)" ]; then
     echo "$repo: repo has untracked files"
     continue
   fi
