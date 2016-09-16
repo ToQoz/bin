@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# - lists fowarded ports with names
+# - filters by peco
+# - open http://
+
+docker ps --format "{{.Names}}\t{{.Ports}}" |
+  grep -- '->' |
+  peco |
+  awk -F"\t" '{print $2}' |
+  sed -e "s/\(.*\)->.*/\1/" |
+  xargs -I{} open http://{}
