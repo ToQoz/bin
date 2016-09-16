@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'socket'
+
+s = TCPServer.open(0)
+port = s.addr[1]
+s.close
+STDOUT.puts "randport: PORT=#{port}"
+exec("PORT=#{port} #{ARGV.join(' ')}")
