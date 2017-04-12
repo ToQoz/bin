@@ -1,0 +1,9 @@
+#!/bin/sh
+
+PORT=${PORT:-8080}
+
+echo "[info] listen $PORT" >> /dev/stderr
+
+while true; do
+  ( echo "HTTP/1.0 200 Ok"; echo; echo "ok" ) | nc -l "$PORT" || break
+done
