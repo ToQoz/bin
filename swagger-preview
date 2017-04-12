@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ]; then
+  echo "usage: preview <swagger.yml path>"
+  exit 1
+fi
+
+yaml=$1
+name="$(readlink --canonicalize "$yaml" | sed -e "s,$HOME,~,g")"
+
+mkdir -p "/tmp/$name"
+swagger-codegen generate -i "$yaml" -l html2 -o "/tmp/$name"
+open "/tmp/$name/index.html"
