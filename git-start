@@ -3,4 +3,5 @@
 set -xe
 git init
 git add .
-git commit -m "Initial commit"
+git toqoz
+git commit --allow-empty -m "Initial commit"
