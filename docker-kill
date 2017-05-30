@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# - lists containers
+# - filters by peco
+# - kill it
+
+CONTAINER_ID=$(docker ps | tail -n +2 | peco | awk '{print $1}')
+if [ -n "$CONTAINER_ID" ]; then
+  docker kill "$CONTAINER_ID"
+fi
