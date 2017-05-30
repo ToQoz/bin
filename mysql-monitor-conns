@@ -1,0 +1,16 @@
+#!/bin/bash
+
+interval=$1
+interval=${interval:=0.3}
+
+echo "start monitoring. interval=${interval}s"
+prev=
+while true
+do
+  current=$(mysql -s -N -e "SHOW STATUS LIKE 'Threads_connected';" 2> /dev/null | tail -n1 | cut -f2)
+  if [ "$prev" != "$current" ]; then
+    echo "[$(date +'%T')] $current"
+  fi
+  prev=$current
+  sleep $interval
+done
