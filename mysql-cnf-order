@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# https://yoku0825.blogspot.jp/2013/10/mysqldmycnf.html
+MYSQL_HOME=$(brew --prefix mysql) mysqld --help --verbose | grep cnf | grep -v MYSQL_TCP_PORT
