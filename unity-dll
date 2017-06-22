@@ -1,0 +1,4 @@
+#!/bin/sh
+
+UNITY=/Applications/Unity/Unity.app/Contents
+"$UNITY/Mono/bin/smcs" -r:"$UNITY/Managed/UnityEditor.dll" -out:"$1" -target:library "$2"
