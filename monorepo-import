@@ -28,7 +28,7 @@ if [ ! -d "$subdir" ]; then
   mkdir -p "$subdir"
   touch "$subdir/.gitignore"
   git add "$subdir/.gitignore"
-  git commit -m "initialize $subdir"
+  git commit -m "monorepo-import: initialize $subdir"
 fi
-git merge --allow-unrelated-histories -X subtree="$subdir" "$remote/master"
+git merge --allow-unrelated-histories -X subtree="$subdir" -m "monorepo-import: import $subdir" "$remote/master" 
 git remote rm "$remote"
