@@ -17,6 +17,11 @@ target_abs="$(cd $(dirname $2) && pwd)/$(basename $2)"
 remote="monorepo-import-$(basename $target_abs)"
 
 cd "$(dirname $monorepo_subdir_abs)"
+if [ "$(git status --porcelain | wc -l)" != 0 ]; then
+  echo "$monorepo_subdir_abs has uncommitted changes." >> /dev/stderr
+  echo "please fix it." >> /dev/stderr
+  exit 1
+fi
 if [ "$(git remote -v | grep monorepo-import-target | wc -l)" != 0 ]; then
   git remote rm "$remote"
 fi
