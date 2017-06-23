@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+usage_exit() {
+  echo "Usage: monorepo-import [monorepo] [target]" >> /dev/stderr
+  echo "Example: monorepo-import ~/git/app/ios ~/git/app-ios"
+  exit 1
+}
+
+[ -z "$1" ] && usage_exit
+[ -z "$2" ] && usage_exit
+
+monorepo_subdir_abs="$(cd $(dirname $1) && pwd)/$(basename $1)"
+target_abs="$(cd $(dirname $2) && pwd)/$(basename $2)"
+
+remote="monorepo-import-$(basename $target_abs)"
+
+cd "$(dirname $monorepo_subdir_abs)"
+if [ "$(git remote -v | grep monorepo-import-target | wc -l)" != 0 ]; then
+  git remote rm "$remote"
+fi
+git remote add "$remote" $target_abs
+git fetch "$remote"
+
+subdir="$(basename $monorepo_subdir_abs)"
+if [ ! -d "$subdir" ]; then
+  mkdir -p "$subdir"
+  touch "$subdir/.gitignore"
+  git add "$subdir/.gitignore"
+  git commit -m "initialize $subdir"
+fi
+git merge --allow-unrelated-histories -X subtree="$subdir" "$remote/master"
+git remote rm "$remote"
