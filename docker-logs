@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# - lists containers
+# - filters by peco
+# - docker logs
+
+CONTAINER_ID=$(docker ps | tail -n +2 | peco | awk '{print $1}')
+if [ -n "$CONTAINER_ID" ]; then
+  docker logs $CONTAINER_ID $@
+fi
