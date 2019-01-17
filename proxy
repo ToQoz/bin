@@ -3,16 +3,16 @@
 set -e
 
 proxy_on() {
-  sudo networksetup -setwebproxy Wi-Fi localhost 8080
-  sudo networksetup -setwebproxystate Wi-Fi on
-  sudo networksetup -setsecurewebproxy Wi-Fi localhost 8080
-  sudo networksetup -setsecurewebproxystate Wi-Fi on
+  networksetup -setwebproxy Wi-Fi localhost 8080
+  networksetup -setwebproxystate Wi-Fi on
+  networksetup -setsecurewebproxy Wi-Fi localhost 8080
+  networksetup -setsecurewebproxystate Wi-Fi on
 }
 
 proxy_off() {
   retval=$?
-  sudo networksetup -setwebproxystate Wi-Fi off
-  sudo networksetup -setsecurewebproxystate Wi-Fi off
+  networksetup -setwebproxystate Wi-Fi off
+  networksetup -setsecurewebproxystate Wi-Fi off
   exit $retval
 }
 
