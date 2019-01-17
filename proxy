@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+proxy_on() {
+  sudo networksetup -setwebproxy Wi-Fi localhost 8080
+  sudo networksetup -setwebproxystate Wi-Fi on
+  sudo networksetup -setsecurewebproxy Wi-Fi localhost 8080
+  sudo networksetup -setsecurewebproxystate Wi-Fi on
+}
+
+proxy_off() {
+  retval=$?
+  sudo networksetup -setwebproxystate Wi-Fi off
+  sudo networksetup -setsecurewebproxystate Wi-Fi off
+  exit $retval
+}
+
+trap proxy_off INT QUIT TERM EXIT
+proxy_on
+mitmproxy "$@"
